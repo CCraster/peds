@@ -1,0 +1,97 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>MDS PLOT</title>
+		<link type="text/css" rel="stylesheet" href="static/css/main.css">
+		<link type="text/css" rel="stylesheet" href="static/css/jquery.range.css">
+		<link type="text/css" rel="stylesheet" href="static/css/d3.parcoords.css">
+		<script src="static/lib/d3.min.js"></script>
+		<script src="static/lib/d3.parcoords.js"></script>
+		<script src="static/lib/jquery-3.1.1.min.js"></script>
+		<script src="static/lib/jquery.range.js"></script>
+	</head>
+	<body>
+		<div id="div_container">
+
+		<!-- Div_left -->
+		<div id="div_left">
+			<div id="div_left_top">
+				<div class="filter">
+					<input type="checkbox" id="checkbox_expert" checked="checked" onclick="plotFilter()"/>专家
+					<input type="checkbox" id="checkbox_notExpert" checked="checked" onclick="plotFilter()"/>非专家
+				</div>
+				<div class="filter">
+					<p id="">Answers</p>
+					<input id="property_answers" class="range-slider" type="hidden"" />
+				</div>
+				<div class="filter">
+					<p id="">Questions</p>
+					<input id="property_questions" class="range-slider" type="hidden"" />
+				</div>
+				<div class="filter">
+					<p id="">Accepted</p>
+					<input id="property_accepted" class="range-slider" type="hidden"" />
+				</div>
+				<div class="filter">
+					<p id="">Comments</p>
+					<input id="property_comments" class="range-slider" type="hidden"" />
+				</div>
+				<div class="filter">
+					<p id="">QA_ratio</p>
+					<input id="property_QA_ratio" class="range-slider" type="hidden"" />
+				</div>
+				<div class="filter">
+					<p id="">AA_ratio</p>
+					<input id="property_AA_ratio" class="range-slider" type="hidden"" />
+				</div>
+				<div class="filter">
+					<p id="">UA_ratio</p>
+					<input id="property_UA_ratio" class="range-slider" type="hidden"" />
+				</div>
+				<div class="filter">
+					<p id="">Upvoted</p>
+					<input id="property_upvoted" class="range-slider" type="hidden"" />
+				</div>
+				<div class="filter">
+					<p id="">Upvotes</p>
+					<input id="property_upvotes" class="range-slider" type="hidden"" />
+				</div>
+			</div>
+			<div id="div_left_bottom">
+			</div>
+		</div>
+		<!-- Div_middle -->
+		<div id="div_middle">
+			<div id="div_middle_top">
+				<div id="div_middle_toolbar">
+					Toolbar
+				</div>
+				<div id="div_middle_canvas">
+					<canvas id="canvas">您的浏览器不支持Canvas！！！</canvas>
+				</div>
+				<div id="div_middle_submit">
+					<input type="button" value="Submit" onclick="mdsPlot_confirm()">
+				</div>
+			</div>
+			<div id="div_middle_bottom">
+				<div id="div_middle_parallelCoordinates" class="parcoords">
+				</div>
+			</div>
+		</div>
+		<!-- Div_right -->
+		<div id="div_right">
+			div_right
+		</div>
+
+		</div>
+
+		<!-- Import JS -->
+		<script src="static/js/data_loading.js"></script>
+		<script src="static/js/display_weight.js"></script>
+		<script src="static/js/filter.js"></script>
+		<!-- <script src="static/js/parallel_coordinates.js"></script> -->
+		<script src="static/js/action.js"></script>
+		<script src="static/js/test.js"></script>
+	</body>
+</html>
+

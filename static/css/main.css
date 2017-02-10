@@ -1,0 +1,134 @@
+html,body{
+	margin: 0 0 auto;
+	height: 100%;
+}
+
+#div_container{
+	width: 98%;
+	height: 100%;
+	margin: 0 auto;
+	/*background-color: #eee;*/
+}
+
+/* 
+	CSS for left div in the container
+*/
+#div_left{
+	width: 25%;
+	height: 100%;
+	float: left;
+	background-color: #999999;
+}
+#div_left_top{
+	width: 100%;
+	height: 60%;
+	/*background-color: #456;*/
+}
+.filter{
+	margin: 0 0 0 20;
+}
+.filter p{
+	margin: 10 0 10 10;
+}
+#div_left_bottom{
+	width: 100%;
+	height: 40%;
+	/*background-color: #123;*/
+}
+#div_left_bottom.bar{
+	fill: steelblue;
+}
+.bar{
+	fill: steelblue;
+}
+
+/* 
+	CSS for middle div in the container
+*/
+#div_middle{
+	width: 50%;
+	height: 100%;
+	float: left;
+}
+
+#div_middle_top{
+	width: 100%;
+	height: 50%;
+}
+
+#div_middle_toolbar{
+	width: 100%;
+	height: 5%;
+}
+
+#div_middle_canvas{
+	margin: 5 5 5 5;
+	width: 100% - 10;
+	height: 90%;
+	border: 1px solid #abc;
+}
+
+#div_middle_canvas canvas{
+	width: 100%;
+	height: 100%;
+}
+
+#div_middle_submit{
+	width: 100%;
+	height: 5%;
+}
+
+#div_middle_bottom{
+	width: 100%;
+	height: 50%;
+}
+#div_middle_parallelCoordinates{
+	width: 100%;
+	height: 100%;
+}
+/* CSS for parallel coordinate*/
+svg {
+  font: 10px sans-serif;
+}
+
+.background path {
+  fill: none;
+  stroke: #ddd;
+  shape-rendering: crispEdges;
+}
+
+.foreground path {
+  fill: none;
+  stroke: steelblue;
+}
+
+.brush .extent {
+  fill-opacity: .3;
+  stroke: #fff;
+  shape-rendering: crispEdges;
+}
+
+.axis line,
+.axis path {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.axis text {
+  text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+  cursor: move;
+}
+
+
+
+
+/* 
+	CSS for right div in the container
+*/
+#div_right{
+	width: 25%;
+	height: 100%;
+	float: left;
+	background-color: #999999;
+}

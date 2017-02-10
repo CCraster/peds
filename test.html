@@ -1,0 +1,60 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>MDS PLOT</title>
+    <link type="text/css" rel="stylesheet" href="static/css/main.css">
+    <script src="static/lib/jquery-3.1.1.min.js"></script>
+      <script>
+      $(document).ready(function(){
+    $("#checkbox_expert").on("click", function(){ console.log("expert clicked");$("#div_right").trigger("expertIsClicked"); });
+    $("#div_right").on("expertIsClicked", function(){ $("#div_right").text("clicked"); });
+});
+  </script>
+  </head>
+
+  <body>
+    <div id="div_container">
+
+    <!-- Div_left -->
+    <div id="div_left">
+      <div id="div_left_top">
+        <div class="filter">
+          <input type="checkbox" id="checkbox_expert" checked="checked"/>专家
+          <input type="checkbox" id="checkbox_notExpert" checked="checked"/>非专家
+        </div>
+        <div class="filter">
+          <p id="">Answers</p>
+          <input id="property_answers" class="range-slider" type="hidden"" />
+        </div>
+      </div>
+      <div id="div_left_bottom">
+      </div>
+    </div>
+    <!-- Div_middle -->
+    <div id="div_middle">
+      <div id="div_middle_top">
+        <div id="div_middle_toolbar">
+          Toolbar
+        </div>
+        <div id="div_middle_canvas">
+          <canvas id="canvas">您的浏览器不支持Canvas！！！</canvas>
+        </div>
+        <div id="div_middle_submit">
+          <input type="button" value="Submit" onclick="mdsPlot_confirm()">
+        </div>
+      </div>
+      <div id="div_middle_bottom">
+        <div id="div_middle_parallelCoordinates" class="parcoords">
+        </div>
+      </div>
+    </div>
+    <!-- Div_right -->
+    <div id="div_right">
+      div_right
+    </div>
+
+    </div>
+
+  </body>
+</html>
+
