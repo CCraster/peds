@@ -7,17 +7,14 @@ var text_padding = 3;
 var radius = 5;
 var canvas = document.getElementById("canvas");
 var context = canvas.getContext("2d");
-canvas.width = document.getElementById("div_middle_canvas").clientWidth;
-canvas.height = document.getElementById("div_middle_canvas").clientHeight;
-var canvas_MDS_width = canvas.width;
-var canvas_MDS_height = canvas.height;
+var canvas_MDS_width, canvas_MDS_height;
 var circles_origin = [], circles = [], weight_MDS = [];
 var data_userInfo = [], data_propertyName = [];
 var xScale, yScale, antiXScale, antiYScale;
-var color_circle_isExpert = "rgb(123, 321, 111)", color_circle_notExpert = "rgb(200,200,200)";
-var color_circle_hover = "rgb(0,150,150)"
+var color_circle_isExpert = "#79C5B7", color_circle_notExpert = "#AAB0B2";
+var color_circle_hover = "#ffe66d"
   , color_circle_click = "rgb(150,0,150)"
-  , color_circle_doubleClicked = "red"
+  , color_circle_doubleClicked = "#E26868"
   , highLightColor = "rgb(150,150,0)";
 var isExpert = 1, notExpert = 0;
 var circles_draged = [], circles_doubleClicked = [];
@@ -129,11 +126,13 @@ var HighLightingTool = (function(){
   return HighLightingTool;
 })();
 
-// Init
-Init();
-
 // Beginning function: loading the results of the MDS.
 function Init(){
+
+  canvas.width = $("#div_middle_canvas").width();
+  canvas.height = $("#div_middle_canvas").height();
+  canvas_MDS_width = canvas.width;
+  canvas_MDS_height = canvas.height;
 
   dataLoading();
   canvas.addEventListener("mousedown", handleMouseDown, false);

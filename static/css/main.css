@@ -1,27 +1,32 @@
 html,body{
-	margin: 0 0 auto;
 	height: 100%;
+	/*margin: 0 0 auto;
+	height: 100%;*/
+	color: #3c3c3c;
 }
 
 #div_container{
 	width: 98%;
 	height: 100%;
 	margin: 0 auto;
-	/*background-color: #eee;*/
+	/*background-color: #ebebeb;*/
 }
+
 
 /* 
 	CSS for left div in the container
 */
 #div_left{
-	width: 25%;
 	height: 100%;
+	margin: 0 10 0 0;
 	float: left;
-	background-color: #999999;
+	background-color: #f4f4f4;
+	border-radius: 10px;
 }
 #div_left_top{
 	width: 100%;
 	height: 60%;
+	overflow-y: auto;
 	/*background-color: #456;*/
 }
 .filter{
@@ -33,13 +38,12 @@ html,body{
 #div_left_bottom{
 	width: 100%;
 	height: 40%;
-	/*background-color: #123;*/
 }
-#div_left_bottom.bar{
-	fill: steelblue;
-}
+/*#div_left_bottom.bar{
+	fill: #79C5B7;
+}*/
 .bar{
-	fill: steelblue;
+	fill: #79C5B7;
 }
 
 /* 
@@ -49,46 +53,49 @@ html,body{
 	width: 50%;
 	height: 100%;
 	float: left;
+	background-color: #f4f4f4;
+	border-radius: 10px;
 }
 
 #div_middle_top{
 	width: 100%;
-	height: 50%;
+	height: 55%;
 }
 
 #div_middle_toolbar{
 	width: 100%;
-	height: 5%;
+	height: 38px;
 }
 
 #div_middle_canvas{
-	margin: 5 5 5 5;
-	width: 100% - 10;
-	height: 90%;
+	margin: 0 5 0 5;
+	width: 98%;
 	border: 1px solid #abc;
 }
 
 #div_middle_canvas canvas{
-	width: 100%;
-	height: 100%;
+	/*width: 100%;*/
+	/*height: 100%;*/
 }
 
 #div_middle_submit{
 	width: 100%;
-	height: 5%;
+	height: 38px;
 }
 
 #div_middle_bottom{
 	width: 100%;
-	height: 50%;
+	height: 45%;
+	margin-bottom: -100px;
 }
 #div_middle_parallelCoordinates{
-	width: 100%;
-	height: 100%;
+	width: 98%;
+	height: 98%;
+	margin:  0 auto;
 }
 /* CSS for parallel coordinate*/
 svg {
-  font: 10px sans-serif;
+	font: 10px sans-serif;
 }
 
 .background path {
@@ -127,8 +134,9 @@ svg {
 	CSS for right div in the container
 */
 #div_right{
-	width: 25%;
 	height: 100%;
+	margin: 0 0 0 10;
 	float: left;
-	background-color: #999999;
+	background-color: #f4f4f4;
+	border-radius: 10px;
 }

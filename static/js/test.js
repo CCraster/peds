@@ -1,13 +1,13 @@
 var blue_to_brown = d3.scale.linear()
   .domain([0, 1])
-  .range(["steelblue", "brown"])
+  .range([color_circle_notExpert, color_circle_isExpert])
   .interpolate(d3.interpolateLab);
 
 var color = function(d) { return blue_to_brown(d["isExpert"]); };
 
 var parcoords = d3.parcoords()("#div_middle_parallelCoordinates")
 	.color(color)
-  .alpha(0.4)
+  .alpha(1)
   .mode("queue") // progressive rendering
   .height($("#div_middle_parallelCoordinates")[0].clientHeight)
   .margin({
@@ -27,7 +27,7 @@ var array_parallel_coordinate_highlighted = [];
 	    .render()
 	    .reorderable()
 	    .brushMode("1D-axes");
-  parcoords.on("brush", function(d){ console.log(d)})
+  // parcoords.on("brush", function(d){ console.log(d)})
  }
 
 // Get User Data fit the display code

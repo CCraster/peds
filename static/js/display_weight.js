@@ -16,7 +16,7 @@ function displayWeight_MDS(weight){
 		.range([0, width]);
 	var y = d3.scale.ordinal()
 		.domain(weight.name.map(function(d) { return d; }))
-    .rangeRoundBands([0, height], 0.1);
+    	.rangeRoundBands([0, height], 0.1);
 
   	var xAxis = d3.svg.axis()
 		.scale(x)

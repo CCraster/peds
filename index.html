@@ -9,6 +9,27 @@
 		<script src="static/lib/d3.parcoords.js"></script>
 		<script src="static/lib/jquery-3.1.1.min.js"></script>
 		<script src="static/lib/jquery.range.js"></script>
+		<script>
+			$(document).ready( function(){
+				$("#div_container").height($(document.body).height());
+				$("#div_left").width($("#div_container").width() * 0.25 - parseInt($("#div_left").css("marginRight")));
+				$("#div_middle_canvas").height($("#div_middle_top").height() - $("#div_middle_toolbar").height() * 2);
+				$("#div_right").width($("#div_container").width() * 0.25 - parseInt($("#div_right").css("marginLeft")));
+				Init();	// Initiating the system
+			});
+
+			$(window).resize( function(){
+				/*
+					window.location.reload(); //兼容chrome safari
+	　　			window.location.href = ""; //兼容火狐
+					location = location; //兼容火狐
+				*/
+				location = location;
+				$("#div_container").height($(document.body).height());
+				console.log($(document.body).height());
+			});
+		</script>
+
 	</head>
 	<body>
 		<div id="div_container">
@@ -64,7 +85,7 @@
 		<div id="div_middle">
 			<div id="div_middle_top">
 				<div id="div_middle_toolbar">
-					Toolbar
+					<button type="button">点我!</button>
 				</div>
 				<div id="div_middle_canvas">
 					<canvas id="canvas">您的浏览器不支持Canvas！！！</canvas>
