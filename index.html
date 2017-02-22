@@ -14,7 +14,7 @@
 				$("#div_container").height($(document.body).height());
 				$("#div_left").width($("#div_container").width() * 0.25 - parseInt($("#div_left").css("marginRight")));
 				$("#div_middle_canvas").height($("#div_middle_top").height() - $("#div_middle_toolbar").height() * 2);
-				$("#div_right").width($("#div_container").width() * 0.25 - parseInt($("#div_right").css("marginLeft")));
+				$("#div_right").width($("#div_container").width() * 0.25 - parseInt($("#div_right").css("marginLeft")) - 1);
 				Init();	// Initiating the system
 			});
 
@@ -25,8 +25,7 @@
 					location = location; //兼容火狐
 				*/
 				location = location;
-				$("#div_container").height($(document.body).height());
-				console.log($(document.body).height());
+				// $("#div_container").height($(document.body).height());
 			});
 		</script>
 
@@ -85,13 +84,18 @@
 		<div id="div_middle">
 			<div id="div_middle_top">
 				<div id="div_middle_toolbar">
-					<button type="button">点我!</button>
+					<input id="marquee_default" class="button_normal" type="button" value="默认选框">
+					<input id="marquee_move" class="button_normal" type="button" value="框选移动">
+					<input id="marquee_approach_highLight" class="button_normal" type="button" value="接近高亮">
+					<input id="marquee_away_highLight" class="button_normal" type="button" value="远离高亮">
+					<input id="marquee_move_highLight" class="button_normal" type="button" value="移动高亮">
+					<input id="marquee_remove" class="button_normal" type="button" value="框选去除">
 				</div>
 				<div id="div_middle_canvas">
 					<canvas id="canvas">您的浏览器不支持Canvas！！！</canvas>
 				</div>
 				<div id="div_middle_submit">
-					<input type="button" value="Submit" onclick="mdsPlot_confirm()">
+					<input class="button_submit" type="button" value="Submit" onclick="mdsPlot_confirm()">
 				</div>
 			</div>
 			<div id="div_middle_bottom">

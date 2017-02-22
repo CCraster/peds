@@ -3,7 +3,17 @@ var blue_to_brown = d3.scale.linear()
   .range([color_circle_notExpert, color_circle_isExpert])
   .interpolate(d3.interpolateLab);
 
-var color = function(d) { return blue_to_brown(d["isExpert"]); };
+var color = function(d){
+  for(p in color_marqueeTool){
+    var posInCircles = getPosInCircleSet(new Circle(d.user_id, d.x, d.y, d.radius, d.isExpert), circles);
+    if(marqueeTools[p].circles_in.indexOf(posInCircles) != -1)
+      return color_marqueeTool[p];
+  }
+  if(d.isExpert == isExpert)
+    return color_circle_isExpert;
+  else if(d.isExpert == notExpert)
+    return color_circle_notExpert;
+};
 
 var parcoords = d3.parcoords()("#div_middle_parallelCoordinates")
 	.color(color)
@@ -16,8 +26,6 @@ var parcoords = d3.parcoords()("#div_middle_parallelCoordinates")
     right: 0,
     bottom: 16
   });
-
-var array_parallel_coordinate_highlighted = [];
 
  function displayParallelCoordinates(circleSet){
  	var user_data_parallel = getUserDataParallel(circleSet);
@@ -52,12 +60,17 @@ function getSingleDisplayUnit(circle){
 }
 
 // To highlight in parallel coordinate
-function highlightDataInParallelCoordinate(circle_num_array){
+function highlightDataInParallelCoordinate(){
   var array_highlighted = [];
-  for(var i = 0; i < circle_num_array.length; i++){
-    var single_user = getSingleDisplayUnit(circles[circle_num_array[i]]);
-    array_highlighted.push(single_user);
+  for(p in color_marqueeTool){
+    var circles_num_set = marqueeTools[p].circles_in;
+    for(var i = 0; i < circles_num_set.length; i++){
+      var single_user = getSingleDisplayUnit(circles[circles_num_set[i]]);
+      array_highlighted.push(single_user);
+    }
   }
+  if(lastMoveOver >= 0)
+    array_highlighted.push(getSingleDisplayUnit(circles[lastMoveOver]));
   if(array_highlighted.length > 0)
     parcoords.highlight(array_highlighted);
   else

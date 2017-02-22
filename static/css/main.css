@@ -1,15 +1,13 @@
 html,body{
-	height: 100%;
-	/*margin: 0 0 auto;
-	height: 100%;*/
 	color: #3c3c3c;
+	/*background-color: #3C4955;*/
 }
 
 #div_container{
 	width: 98%;
 	height: 100%;
 	margin: 0 auto;
-	/*background-color: #ebebeb;*/
+	/*background-color: #3C4955;*/
 }
 
 
@@ -65,6 +63,38 @@ html,body{
 #div_middle_toolbar{
 	width: 100%;
 	height: 38px;
+}
+
+.button_normal{
+	width: 80px;
+	line-height: 26px;
+	font-weight: bold;
+	/*background-color: #bcbcbc;*/
+	color: #8c96a0;
+	cursor: pointer;
+	border-radius: 4px;
+	margin:5px 0px 5px 4px;
+	border:1px solid #dce1e6;
+	box-shadow: 0 1px 2px #fff inset,0 -1px 0 #a8abae inset;
+	position: relative;
+	overflow: hidden;
+}
+
+.button_submit{
+	width: 80px;
+	float: right;
+	line-height: 26px;
+	font-weight: bold;
+	background-color: #4bd0b8;;
+	color: white;
+	cursor: pointer;
+	border-radius: 4px;
+	border: none;
+	margin:5px 20px 5px 4px;
+	transition: background-color 0.3s ease;
+}
+.button_submit:hover{
+	background-color: #e17da2;
 }
 
 #div_middle_canvas{

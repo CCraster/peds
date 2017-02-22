@@ -4,11 +4,12 @@ import tornado.options
 import tornado.web
 import os
 import json
+import wmds
 
 from tornado.options import define, options
 
 
-define("port", default=8888, help="run on the given port", type=int)
+define("port", default=8689, help="run on the given port", type=int)
 
 
 class MainHandler(tornado.web.RequestHandler):
@@ -18,7 +19,7 @@ class MainHandler(tornado.web.RequestHandler):
         data_plot = self.request.body
         data_plot = data_plot.decode('ascii')
         dict_circles = {}
-        # dict_circles 中的前三个元素别分是框选中的圆、移动的圆和双击的圆
+        # dict_circles
         dict_circles[0] = {"positions": [], "user_id": []}
         dict_circles[1] = {"positions": [], "user_id": []}
         dict_circles[2] = {"positions": [], "user_id": []}
@@ -34,8 +35,10 @@ class MainHandler(tornado.web.RequestHandler):
                     dict_circles[i]["positions"].append(single_plot_coordinate)
                     dict_circles[i]["user_id"].append(single_plot[0])
 
-        # with open("static/data/pos_v2pi.json", 'w') as fs:
-        #     json.dump(dict_circles, fs)
+        with open("static/data/pos_v2pi.json", 'w') as fs:
+            json.dump(dict_circles, fs)
+
+        wmds.main()
 
         # with open("static/data/demo_pos.json", "r") as fs:
         #     data_origin =json.load(fs)

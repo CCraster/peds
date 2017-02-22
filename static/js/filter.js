@@ -51,8 +51,6 @@ function plotFilter(){
 		var trueOrFalse = checkPlotConformToFilter(circles_origin[i]);
 		if(trueOrFalse && posInCircleSet < 0){
 			var circle = new Circle(circles_origin[i].user_id, circles_origin[i].x, circles_origin[i].y, radius, circles_origin[i].expert)
-			if(highLightingTool.isCircleInside(circle))
-				circle.color_fill = highLightColor;
 			display_circleSet_temp.push(circle);
 		}
 		else if(!trueOrFalse && posInCircleSet >= 0){
@@ -62,10 +60,8 @@ function plotFilter(){
 		}
 	}
 
-	circles_draged = [];
 	circles_doubleClicked = reGetFocusCircles(circles_doubleClicked, display_circleSet_temp);
-	circles = cloneCircleArray(display_circleSet_temp);
-	highLightingTool.circles_in = highLightingTool.getCirclesInHighLightingTool(highLightingTool);
+	circles = display_circleSet_temp;
 	canvasRedrew();
 	displayParallelCoordinates(circles);
 }

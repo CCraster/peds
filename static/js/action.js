@@ -2,8 +2,8 @@
 function mdsPlot_confirm(){
     var xmlhttp;
     var url = "/";
-    var mds_pos = getPlotString(highLightingTool.circles_in) + "@" 
-    + getPlotString(circles_draged) + "@" + getPlotString(circles_doubleClicked);
+    var mds_pos = getPlotString(marqueeTools["marquee_default"].circles_in) + "@" 
+    + getPlotString(marqueeTools["marquee_move"].circles_in) + "@" + getPlotString(circles_doubleClicked);
 
 	if (window.XMLHttpRequest){// code for IE7+, Firefox, Chrome, Opera, Safari
 	  xmlhttp=new XMLHttpRequest();

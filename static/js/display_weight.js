@@ -7,7 +7,7 @@ function displayWeight_MDS(weight){
 	if(d3.select("svg[id=\"div_left_bottom_svg\"]"))
 		d3.select("svg[id=\"div_left_bottom_svg\"]").remove();
 
-	var margin = {top: 20, right: 30, bottom: 40, left: 30},
+	var margin = {top: 20, right: 30, bottom: 40, left: 60},
 	width = document.getElementById("div_left_bottom").clientWidth - margin.left - margin.right,
 	height = document.getElementById("div_left_bottom").clientHeight - margin.top - margin.bottom;
 
@@ -15,7 +15,7 @@ function displayWeight_MDS(weight){
 		.domain([0, d3.max(weight.value, function(d){ return d; })]).nice()
 		.range([0, width]);
 	var y = d3.scale.ordinal()
-		.domain(weight.name.map(function(d) { return d; }))
+		.domain(data_propertyName.map(function(d) { return d; }))
     	.rangeRoundBands([0, height], 0.1);
 
   	var xAxis = d3.svg.axis()
@@ -40,7 +40,7 @@ function displayWeight_MDS(weight){
 	    	.enter().append("rect")
 	      .attr("class", "bar")
 	      .attr("x", 0)
-	      .attr("y", function(d, i) { return y(weight.name[i]); })
+	      .attr("y", function(d, i) { return y(data_propertyName[i]); })
 	      .attr("width", function(d) { return x(d); })
 	      .attr("height", y.rangeBand());
 
