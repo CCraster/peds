@@ -40,7 +40,7 @@ var isExpert = 1, notExpert = 0;
 var click_startPos = {x: 0, y: 0},click_endPos = {x: 0, y: 0};
 var circle_clicked_num = -1, circle_moveOver_num = -1, lastMoveOver = -1;
 var tags_all = [], tags_contains = [];
-var signal_MDS = "dsdsd";
+var signal_MDS = "initiate", signal_weight = "initiate";
 
 // Circle Class
 var Circle = (function(){

@@ -59,12 +59,14 @@ class WeightChangeHandler(tornado.web.RequestHandler):
     def get(self):
     	self.render("index.html")
     def post(self):
-        weight_new = self.request.body.decode('ascii')
-        # print(weight_new)
+        weight_message = self.request.body.decode('ascii')
+        weight_new = weight_message.split("%")[0]
+        singal_weight = weight_message.split("%")[1]
         youfunction()   #师姐你的处理函数
         with open("static/data/demo_pos_reset.json", "r") as fs:
             data_feedback = json.load(fs)
-        self.write(data_feedback)
+        singal_weight_feedback = "这里写入新的返回的权值的signal" #这里写入你新的权值的signal
+        self.write(json.dumps(data_feedback) + "%" + singal_weight_feedback)
 
 class FocusUserConfirmHandler(tornado.web.RequestHandler):
     def get(self):
@@ -86,7 +88,7 @@ def main():
     application = tornado.web.Application([
         (r"/", MainHandler),
         (r"/weightChange", WeightChangeHandler),
-        (r"/foucuUserChange", FocusUserConfirmHandler)
+        (r"/focusUserChange", FocusUserConfirmHandler)
 
     ],**settings)
 

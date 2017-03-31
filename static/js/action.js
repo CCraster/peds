@@ -41,12 +41,14 @@ function weightConfirm(){
 	}
 	xmlhttp.onreadystatechange = function(){
 	  if (xmlhttp.readyState == 4 && xmlhttp.status == 200){
-	  	// console.log(xmlhttp.responseText);
-		showReMDSPlot(xmlhttp.responseText);
+	  	mds_plot = xmlhttp.responseText.split("%")[0];
+	  	signal_weight = xmlhttp.responseText.split("%")[1];
+	  	console.log(signal_weight);
+		showReMDSPlot(mds_plot);
 	  }
 	}
 	xmlhttp.open("POST", url, true);
-	xmlhttp.send(JSON.stringify(weight_MDS));
+	xmlhttp.send(JSON.stringify(weight_MDS) + "%" + signal_weight);
 }
 //
 function focusUserConfirm(){
