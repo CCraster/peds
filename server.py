@@ -62,7 +62,9 @@ class WeightChangeHandler(tornado.web.RequestHandler):
         weight_message = self.request.body.decode('ascii')
         weight_new = weight_message.split("%")[0]
         singal_weight = weight_message.split("%")[1]
-        youfunction()   #师姐你的处理函数
+
+        youfunction(weight_new, singal_weight)   #师姐你的处理函数, weight_new是前台传入的权值，signal_weight是权值的参数
+
         with open("static/data/demo_pos_reset.json", "r") as fs:
             data_feedback = json.load(fs)
         singal_weight_feedback = "这里写入新的返回的权值的signal" #这里写入你新的权值的signal
@@ -73,7 +75,7 @@ class FocusUserConfirmHandler(tornado.web.RequestHandler):
         self.render("index.html")
     def post(self):
         focusUserId = self.request.body.decode('ascii')
-        youfunction()   #师姐你的处理函数
+        youfunction(focusUserId)   #师姐你的处理函数， focusUserId是屏幕上筛选后userid
         self.write("这里写返回给前台的标识")
 
 
