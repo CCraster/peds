@@ -16,14 +16,14 @@ class MainHandler(tornado.web.RequestHandler):
     def get(self):
     	self.render("index.html")
     def post(self):
-        data_plot = self.request.body
-        data_plot = data_plot.decode('ascii')
+        mds_message = self.request.body.decode('ascii')
+        signal_MDS = mds_message.split('%')[1]
         dict_circles = {}
         # dict_circles
         dict_circles[0] = {"positions": [], "user_id": []}
         dict_circles[1] = {"positions": [], "user_id": []}
         dict_circles[2] = {"positions": [], "user_id": []}
-        circles_all = data_plot.split('@')
+        circles_all = mds_message.split('%')[0].split('@')
         for i in range(len(circles_all)):
             for circles_singleSet in circles_all[i].split("&"):
                 if len(circles_singleSet) > 0:
@@ -49,16 +49,32 @@ class MainHandler(tornado.web.RequestHandler):
 
         # with open("static/data/demo_pos_reset.json", "w") as fs:
         #     json.dump(data_origin, fs)
-
         with open("static/data/demo_pos_reset.json", "r") as fs:
-            data_origin = json.load(fs)
-        self.write(data_origin)
+            data_feedback = json.load(fs)
+        self.write(data_feedback)
 
 
-class TestHandler(tornado.web.RequestHandler):
+
+class WeightChangeHandler(tornado.web.RequestHandler):
     def get(self):
-    	print(self.request)
-    	self.render("static/test.html")
+    	self.render("index.html")
+    def post(self):
+        weight_new = self.request.body.decode('ascii')
+        # print(weight_new)
+        youfunction()   #师姐你的处理函数
+        with open("static/data/demo_pos_reset.json", "r") as fs:
+            data_feedback = json.load(fs)
+        self.write(data_feedback)
+
+class FocusUserConfirmHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.render("index.html")
+    def post(self):
+        focusUserId = self.request.body.decode('ascii')
+        youfunction()   #师姐你的处理函数
+        self.write("这里写返回给前台的标识")
+
+
 
 settings = {
     "static_path": os.path.join(os.path.dirname(__file__), "static"),
@@ -69,7 +85,8 @@ def main():
     tornado.options.parse_command_line()
     application = tornado.web.Application([
         (r"/", MainHandler),
-        (r"/test", TestHandler)
+        (r"/weightChange", WeightChangeHandler),
+        (r"/foucuUserChange", FocusUserConfirmHandler)
 
     ],**settings)
 

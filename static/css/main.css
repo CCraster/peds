@@ -1,13 +1,56 @@
 html,body{
-	color: #3c3c3c;
-	/*background-color: #3C4955;*/
+	color: #fff;
+	/*margin: 0 auto;*/
+	height: calc(100% - 8px);
+	/*background: -moz-linear-gradient(135deg,#878787 25%,#afafaf 0,#afafaf 50%,#878787 0,#878787 75%,#afafaf 0);*/
+	background-color: #28303a;
+}
+input[type=checkbox]{
+	color: #ef3753;
+
+}
+input[type=checkbox]:hover{
+	border-color: red;
+	
+}
+input[type=button]:hover{
+	transition: background-color 0.5s ease;
+}
+
+#div_cheated{
+	width: 98%;
+	margin: 0 auto;
+	margin-left: 1%;
+	margin-bottom: 4px;
+	background-color: black;
+}
+.div_checkbox_cheated{
+	width: auto;
+	height: 20px;
+	margin-right: 30px;
+	display: inline-block;
 }
 
 #div_container{
 	width: 98%;
-	height: 100%;
+	height: calc(100% - 26px);
 	margin: 0 auto;
+	
 	/*background-color: #3C4955;*/
+}
+
+.logo_bar{
+	width: calc(100% - 10px);
+	height: 20px;
+	padding: 0 0 0 10;
+	color: #ffffff;
+	border-radius: 5px;
+	line-height: 20px;
+	/*background: -moz-linear-gradient(135deg,#ef3753 25%,#000 0,#000 50%,#ef3753 0,#ef3753 75%,#000 0);*/
+	background: -moz-linear-gradient(135deg,#000 25%,#ef3753 0,#ef3753 50%,#000 0,#000 75%,#ef3753 0);
+	-moz-user-select: none;
+	-khtml-user-select: none;
+	user-select: none;
 }
 
 
@@ -15,82 +58,146 @@ html,body{
 	CSS for left div in the container
 */
 #div_left{
+	width: calc(22% - 10px);
 	height: 100%;
 	margin: 0 10 0 0;
 	float: left;
-	background-color: #f4f4f4;
 	border-radius: 10px;
 }
 #div_left_top{
 	width: 100%;
-	height: 60%;
+	height: calc(60% - 25px - 5px);
+	/*overflow-x: hidden;*/
 	overflow-y: auto;
-	/*background-color: #456;*/
+	background-color: #182128;
+	margin-top: 5px;
+	border: 1px dashed #ef3753;
+}
+
+
+#div_left_top_tag{
+	width: auto;
+	height: calc(30% - 4px);
+	margin: 0 5 3 5;
+	background-color: #182128;
+	border-bottom: 1px dashed #ef3753;
+}
+.span_normal{
+	width: 100%;
+	height: 20px;
+}
+#div_left_top_tag_content{
+	width: auto;
+	height: calc(100% - 22px);
+	overflow-y: auto;
+}
+input.tags_button_choosed{
+	margin: 5 5 0 0;
+	padding: 0 5 0 5;
+	border: none; 
+	color: #fff;
+	line-height: 26px;
+	cursor: pointer;
+	background-color: #ef3753;
+}
+input.tags_button_unchoosed{
+	margin: 5 5 0 0;
+	padding: 0 5 0 5;
+	border: none; 
+	color: #fff;
+	line-height: 26px;
+	cursor: pointer;
+	background-color: #CD7F32;
+}
+input.tags_button_choosed:hover{
+
+}
+input.tags_button_unchoosed:hover{
+	background-color: red;
+}
+#div_filter_container_property{
+	width: auto;
+	height: calc(70% - 20px);
+	margin: 0 5 0 5;
+	overflow-y: auto;
 }
 .filter{
-	margin: 0 0 0 20;
+	margin: 0 0 0 5;
 }
-.filter p{
-	margin: 10 0 10 10;
+.filter_span{
+	width: 80px;
+	margin: 30 0 5 0;
+	display: block;
+	float: left;
+
+}
+.filter_div{
+	width: calc(100% - 80px - 10px);
+	float: left;
 }
 #div_left_bottom{
 	width: 100%;
 	height: 40%;
+	margin-top: 5px;
+}
+#div_left_bottom_weight{
+	width: 100%;
+	height: calc(100% - 20px - 5px - 2px);
+	margin-top: 5px;
+	border: 1px dashed #ef3753;
+	background-color: #182128;
 }
 /*#div_left_bottom.bar{
 	fill: #79C5B7;
 }*/
 .bar{
-	fill: #79C5B7;
+	fill: #CF4858;
+}
+.locate_bar{
+	fill: rgba(0, 0 ,0 ,1);
 }
 
 /* 
 	CSS for middle div in the container
 */
 #div_middle{
-	width: 50%;
+	width: 56%;
 	height: 100%;
 	float: left;
-	background-color: #f4f4f4;
 	border-radius: 10px;
 }
 
 #div_middle_top{
 	width: 100%;
-	height: 55%;
+	height: 60%;
 }
 
 #div_middle_toolbar{
 	width: 100%;
 	height: 38px;
+	background-color: #182128;
 }
 
 .button_normal{
 	width: 80px;
+	color: #fff;
 	line-height: 26px;
-	font-weight: bold;
-	/*background-color: #bcbcbc;*/
-	color: #8c96a0;
 	cursor: pointer;
 	border-radius: 4px;
-	margin:5px 0px 5px 4px;
-	border:1px solid #dce1e6;
-	box-shadow: 0 1px 2px #fff inset,0 -1px 0 #a8abae inset;
-	position: relative;
+	margin: 5 5 0 0;
+	border: none;
+	background-color: #ef3753;
 	overflow: hidden;
 }
-
 .button_submit{
 	width: 80px;
-	float: right;
 	line-height: 26px;
-	font-weight: bold;
-	background-color: #4bd0b8;;
+	background-color: #4bd0b8;
 	color: white;
 	cursor: pointer;
 	border-radius: 4px;
 	border: none;
-	margin:5px 20px 5px 4px;
+	margin: 5 5 0 0;
 	transition: background-color 0.3s ease;
 }
 .button_submit:hover{
@@ -99,29 +206,32 @@ html,body{
 
 #div_middle_canvas{
 	margin: 0 5 0 5;
-	width: 98%;
-	border: 1px solid #abc;
-}
-
-#div_middle_canvas canvas{
-	/*width: 100%;*/
-	/*height: 100%;*/
-}
-
-#div_middle_submit{
-	width: 100%;
-	height: 38px;
+	width: calc(100% - 10px);
+	height: calc(100% - 20px - 38px - 5px);
+	border: 1px dashed #ef3753;
+	background-color: #182128;
 }
 
 #div_middle_bottom{
 	width: 100%;
-	height: 45%;
-	margin-bottom: -100px;
+	height: 40%;
 }
 #div_middle_parallelCoordinates{
-	width: 98%;
-	height: 98%;
-	margin:  0 auto;
+	width: calc(100% - 150px - 2px);
+	height: calc(100% - 20px - 2px - 5px);
+	border: 1px dashed #ef3753;
+	margin-top: 5px;
+	float: left;
+}
+#div_middle_bottom_property{
+	width: calc(150px - 20px - 2px);
+	height: calc(100% - 20px - 2px - 5px);
+	border: 1px dashed #ef3753;
+	float: left;
+	padding-left: 20px;
+	margin-top: 5px;
+	background-color: #182128;
+	overflow-y: auto;
 }
 /* CSS for parallel coordinate*/
 svg {
@@ -148,13 +258,13 @@ svg {
 .axis line,
 .axis path {
   fill: none;
-  stroke: #000;
+  stroke: #fff;
   shape-rendering: crispEdges;
 }
 
 .axis text {
-  text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
-  cursor: move;
+	fill: #fff;
+  /*text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;*/
 }
 
 
@@ -164,9 +274,115 @@ svg {
 	CSS for right div in the container
 */
 #div_right{
+	width: calc(22% - 10px);
 	height: 100%;
 	margin: 0 0 0 10;
 	float: left;
-	background-color: #f4f4f4;
 	border-radius: 10px;
+}
+#div_right_content{
+	width: calc(100% - 2px);
+	height: calc(100% - 20px - 2px - 5px);
+	margin-top: 5px;
+	border: 1px dashed #ef3753;
+	background-color: #182128;
+}
+#div_right_top{
+	width: 100%;
+	height: 20%;
+	border-bottom: 1px dashed #ef3753;
+}
+#div_right_top_left{
+	width: 40%;
+	height: 100%;
+	float: left;
+	/*background-color: #e21111;*/
+	text-align: center;
+}
+.image_avatar{
+	/*width: 80%;*/
+	height: 70%;
+	margin: 5 0 5 0;
+}
+#div_right_top_right{
+	width: 60%;
+	height: 100%;
+	float: left;
+	/*background-color: #e2ffff;*/
+	overflow: auto;
+}
+.span_reputation{
+	margin: 5 0 5 5 ;
+}
+#reputation{
+	font-style: bold;
+	/*background-color: teal;*/
+}
+#badge_gold{
+	margin: 0 0 0 5;
+	padding: 0 8 0 8;
+	display: none;
+	background-color: #CD7F32;
+}
+#badge_silver{
+	margin: 0 0 0 5;
+	padding: 0 8 0 8;
+	display: none;
+	background-color: #C0C0C0;
+}
+#badge_bronze{
+	margin: 0 0 0 5;
+	padding: 0 8 0 8;
+	display: none;
+	background-color: #8C7853;
+}
+#div_right_middle1{
+	width: calc(100% - 10px);
+	height: calc(25% - 10px);
+	padding: 5 5 5 5;
+	border-bottom: 1px dashed #ef3753;
+	overflow: auto;
+}
+#div_right_middle2{
+	width: calc(100% - 10px);
+	height: calc(25% - 10px);
+	padding: 5 5 5 5;
+	border-bottom: 1px dashed #ef3753;
+	overflow: auto;
+}
+#div_right_bottom{
+	width: 100%;
+	height: calc(30% - 3px);
+	overflow: auto;
+}
+.div_tag1{
+	width: auto;
+	height: 30px;
+	margin: 5 5 0 5;
+	padding: 0 5 0 5;
+	font-size: 75%;
+	visibility: hidden;
+	background-color: #CD7F32;
+}
+.div_tag2{
+	width: auto;
+	height: 30px;
+	margin: 5 0 0 5;
+	padding: 0 5 4 5;
+	float: left;
+	font-size: 75%;
+	visibility: hidden;
+	background-color: #8C7853;
+}
+.span_tagname{
+	line-height: 30px;
+	margin: 0 20 0 0;
+	/*float: left;*/
+}
+.span_score{
+	line-height: 15px;
+	float: right;
+}
+.span_score > span > span{
+	font-size: 50%;
 }

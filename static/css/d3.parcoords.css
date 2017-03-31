@@ -28,5 +28,11 @@
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  background-color: #f4f4f4;
+  background-color: #182128;
+}
+.domain{
+  stroke: #fff !important;
+}
+.parcoords line{
+  stroke: #fff !important;
 }

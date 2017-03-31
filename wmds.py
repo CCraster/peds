@@ -21,9 +21,12 @@ from sklearn.metrics import euclidean_distances
 import json
 import sys
 
+# from compute_similarity import compute_pos_with_w
+
 ori_data_num = 30
 ori_data_dim = 9
 ori_data_path = "data/demo_X.csv"
+user_id_path = "UserInfo_Spider/userid_sample1.txt"
 new_data_dim = 2
 
 class V2PI:
@@ -32,7 +35,7 @@ class V2PI:
             self.dist_pair_func = self.pair_euclidean_distance
             self.dist_func = self.euclidean_distance
             self.c_sum = 5000000
-            self.threshold = 1e-6
+            self.threshold = 1e-3
         elif dist_method == "canberra":
             self.dist_pair_func = self.pair_canberra_distance
             self.dist_func = self.canberra_distance
@@ -231,6 +234,25 @@ def read_matrix(X, fname):
             X[x][y] = line[y]
         x += 1
 
+def load_useridlist(userid_path, usernum):
+    user_ids = []
+    with open(userid_path, encoding='utf-8') as f:
+        for i in range(0, usernum):
+            user_ids.append(f.readline().strip())
+    return user_ids
+
+def id2index(user_ids, userid_list):
+    user_indexs = []
+    for ids in userid_list:
+        user_indexs.append(user_ids.index(ids))
+    return user_indexs
+
+def index2id(user_ids, userindexs_list):
+    user_ids_new = []
+    for index in userindexs_list:
+        user_ids_new.append(user_ids[index])
+    return user_ids_new
+
 # 读传回的json文件
 def init_matrix(ori_data_num, ori_data_dim, new_data_dim):
     user_pos_dict = {}
@@ -252,9 +274,14 @@ def init_matrix(ori_data_num, ori_data_dim, new_data_dim):
     X_new = np.zeros((len(user_set), ori_data_dim))
     Z_new = np.zeros((len(user_set), new_data_dim))
 
+    # trans user id to user index
+    user_ids = load_useridlist(user_id_path, ori_data_num)
+    user_pos_dict['user_id'] = id2index(user_ids, user_pos_dict['user_id'])
+
     sub = 0
     for pos, user in zip(user_pos_dict['positions'], user_pos_dict['user_id']):
-        X_new[sub] = X[int(user)]
+        X_new[sub] = X[user]
+        # X_new[sub] = X[int(user)]
         Z_new[sub] = pos
         sub += 1
 
@@ -286,14 +313,20 @@ def run(v2pi):
     print(v2pi_new.Z)
     print("Weight: %s" % w)
 
+    # #cal mds by calculated w
+    # feature_path = r'data\feature_2013Dana1_3m_addtrans.txt'
+    # v2pi_new_Z = compute_pos_with_w(feature_path, ori_data_num, w)
+
     # 写回json文件
     point_dict = {}
     point_dict['positions'] = []
-    point_dict['user_id'] = []
+    # point_dict['user_id'] = []
     point_dict['weight'] = {"value": []}
 
     for i in range(len(v2pi_new.Z)):
-        point_dict['user_id'].append(i)
+    # for i in range(len(v2pi_new_Z)):
+        # point_dict['user_id'].append(i)
+        # point_dict['positions'].append(list(v2pi_new.Z))
         point_dict['positions'].append(list(v2pi_new.Z[i]))
 
     for i in range(len(w)):
@@ -301,6 +334,7 @@ def run(v2pi):
 
     with open("static/data/demo_pos_reset.json", 'w') as fs:
         json.dump(point_dict, fs)
+        # print(point_dict)
 
 
 def main():

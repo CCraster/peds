@@ -144,10 +144,43 @@ function getUserDataParallel(circleSet){
 // Create the format for single display unit
 function getSingleDisplayUnit(circle){
   var single_user = new Object();
-  single_user.name = data_userInfo[circleSet[i].user_id][0];
+  var user_index = data_userId.indexOf(circle.user_id);
+  single_user.user_id = circle.user_id;
+  single_user.isExpert = data_userInfo[user_index][0];
   for(var j = 0; j < data_propertyName.length; j++){
-    single_user[data_propertyName[j]] = data_userInfo[circleSet[i].user_id][j + 1];
+    single_user[data_propertyName[j]] = data_userInfo[user_index][j + 1];
   }
+  return single_user;
+}
 
-  return single_user
+// To highlight in parallel coordinate
+function highlightDataInParallelCoordinate(){
+  var array_highlighted = [];
+  for(var i = 0; i < circles.length; i++){
+    if(circles[i].color_fill.length > 1)
+      array_highlighted.push(getSingleDisplayUnit(circles[i]));
+  }
+  if(array_highlighted.length > 0)
+    parcoords.highlight(array_highlighted);
+  else
+    parcoords.unhighlight();
+}
+//////////////////////////////////////////////////////////////////////////////
+function handleParallelCheckBoxClick(e){
+  var filter_id = e.target.id.split("checkbox_parallel_")[1];
+  if(e.target.checked == true){
+    property_display.push(filter_id);
+    $("#div_filter_container_property").append("<div id=\"div_filter_" + filter_id + "\" class=\"filter\"><p>" + filter_id + "</p>" + "<input id=\"property_" + filter_id + "\" class=\"range_slider\" type=\"hidden\" />" + "</div>");
+    createFilter(filter_id);
+    array_hideAxis.splice(array_hideAxis.indexOf(filter_id), 1);
+    $("#div_middle_parallelCoordinates").empty();
+    displayParallelCoordinates(circles);
+  }
+  else{
+    $("#div_filter_" + filter_id).remove();
+    property_display.splice(property_display.indexOf(filter_id), 1);
+    array_hideAxis.push(filter_id);
+    $("#div_middle_parallelCoordinates").empty();
+    displayParallelCoordinates(circles);
+  }
 }
