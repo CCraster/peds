@@ -26,10 +26,10 @@ function createFilter(property_name){
 function plotFilter(){
 
 	var display_circleSet_temp = cloneCircleArray(circles);
-	flag_T_F = $("#checkbox_expert").prop("checked");
-	flag_F_F = $("#checkbox_notExpert").prop("checked");
-	flag_T_T = $("#checkbox_expert_machine").prop("checked");
-	flag_F_T = $("#checkbox_notExpert_machine").prop("checked");
+	flag_T_T = $("#checkbox_expert").prop("checked");
+	flag_F_T = $("#checkbox_notExpert").prop("checked");
+	flag_T_F = $("#checkbox_expert_machine").prop("checked");
+	flag_F_F = $("#checkbox_notExpert_machine").prop("checked");
 	flag_show_real = $("#checkbox_real_show").prop("checked");
 	flag_show_machine = $("#checkbox_machine_show").prop("checked");
 	for(var i = 0; i < property_display.length; i++){
@@ -44,7 +44,7 @@ function plotFilter(){
 		var posInCircleSet = getPosInCircleSet(circles_origin[i], display_circleSet_temp);
 		var trueOrFalse = checkPlotConformToFilter(circles_origin[i]);
 		if(trueOrFalse && posInCircleSet < 0){
-			var circle = new Circle(circles_origin[i].user_id, circles_origin[i].x, circles_origin[i].y, radius, circles_origin[i].expert)
+			var circle = new Circle(circles_origin[i].user_id, circles_origin[i].x, circles_origin[i].y, circles_origin[i].expert)
 			display_circleSet_temp.push(circle);
 		}
 		else if(!trueOrFalse && posInCircleSet >= 0){
@@ -183,7 +183,7 @@ function handleTagsSelectCheckBoxClick(e){
 }
 // handleMarqueeMoveCheckboxClick
 function handleMarqueeRemoveCheckboxClick(e){
-	if($("#marquee_move_checkbox").prop("checked") == true)
+	if($("#marquee_remove_checkbox").prop("checked") == true)
 		flag_maintain_circles_in_marquee = false;
 	else
 		flag_maintain_circles_in_marquee = true;

@@ -60,7 +60,7 @@ var pc = function(selection) {
     .append("svg")
       .attr("width", __.width)
       .attr("height", __.height)
-      .style("font", "14px sans-serif")
+      .style("font", "10px sans-serif")
       .style("position", "absolute")
 
     .append("svg:g")
@@ -278,16 +278,16 @@ pc.autoscale = function() {
 
   // default styles, needs to be set when canvas width changes
   ctx.foreground.strokeStyle = __.color;
-  ctx.foreground.lineWidth = 1.4;
+  ctx.foreground.lineWidth = 1;
   ctx.foreground.globalCompositeOperation = __.composite;
   ctx.foreground.globalAlpha = __.alpha;
   ctx.foreground.scale(devicePixelRatio, devicePixelRatio);
   ctx.brushed.strokeStyle = __.brushedColor;
-  ctx.brushed.lineWidth = 1.4;
+  ctx.brushed.lineWidth = 1;
   ctx.brushed.globalCompositeOperation = __.composite;
   ctx.brushed.globalAlpha = __.alpha;
   ctx.brushed.scale(devicePixelRatio, devicePixelRatio);
-  ctx.highlight.lineWidth = 3;
+  ctx.highlight.lineWidth = 1;
   ctx.highlight.scale(devicePixelRatio, devicePixelRatio);
 
   return this;

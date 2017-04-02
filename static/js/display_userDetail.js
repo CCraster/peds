@@ -16,15 +16,15 @@ function displayUserDetail(user_id){
 		$("#user_questions").text(data_userDetail[user_id]["stat"]["questions"]);
 		$("#user_people_reached").text(data_userDetail[user_id]["stat"]["people reached"]);
 
-		$("#div_right_middle1").empty();
+		$("#div_right_middle1_content").empty();
 		for(p in data_userDetail[user_id]["user_links"]){
-			$("#div_right_middle1").append("<span>" + p.substring(5, p.length) + ": " + data_userDetail[user_id]["user_links"][p] + "</span><br>");
+			$("#div_right_middle1_content").append("<span>" + p.substring(5, p.length) + ": " + data_userDetail[user_id]["user_links"][p] + "</span><br>");
 		}
 
-		$("#div_right_middle2").text(data_userDetail[user_id]["about"]);
+		$("#div_right_middle2_content").text(data_userDetail[user_id]["about"]);
 
 		if(data_userDetail[user_id]["total_tags"] > 0){
-			$("#label_total_tag").text("(" + data_userDetail[user_id]["total_tags"] + ")");
+			$("#label_total_tag").text(data_userDetail[user_id]["total_tags"]);
 			for(p in data_userDetail[user_id]["top_tags"]["first"]){
 				$("#div_right_bottom_first_span").text(p);
 				$("#div_right_bottom_first_score").text(data_userDetail[user_id]["top_tags"]["first"][p]["Score"]);

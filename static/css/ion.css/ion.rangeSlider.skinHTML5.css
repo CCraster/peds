@@ -8,13 +8,13 @@
 // Skin details */
 
 .irs {
-    height: 55px;
+    height: 20px;
 }
 .irs-with-grid {
-    height: 75px;
+    height: 40px;
 }
-.irs-line {
-    height: 10px; top: 33px;
+.irs-line { /*控制背后的进度条*/
+    height: 6px; top: 25px;
     background: #EEE;
     background: linear-gradient(to bottom, #DDD -50%, #FFF 150%); /* W3C */
     border: 1px solid #CCC;
@@ -31,20 +31,20 @@
         height: 8px;
     }
 
-.irs-bar {
-    height: 10px; top: 33px;
-    border-top: 1px solid #ef3753;
-    border-bottom: 1px solid #ef3753;
-    background: #ef3753;
+.irs-bar { /*控制背后的进度条*/
+    height: 6px; top: 25px;
+    border-top: 1px solid #399ee6;
+    border-bottom: 1px solid #399ee6;
+    background: #399ee6;
     /*background: linear-gradient(to top, rgba(66,139,202,1) 0%,rgba(127,195,232,1) 100%);*/ /* W3C */
-    background-color: #ef3753;
+    background-color: #399ee6;
 }
     .irs-bar-edge {
-        height: 10px; top: 33px;
+        height: 6px; top: 33px;
         width: 14px;
-        border: 1px solid #ef3753;
+        border: 1px solid #399ee6;
         border-right: 0;
-        background: #ef3753;
+        background: #399ee6;
         background: linear-gradient(to top, rgba(66,139,202,1) 0%,rgba(127,195,232,1) 100%); /* W3C */
         border-radius: 16px 0 0 16px;
         -moz-border-radius: 16px 0 0 16px;
@@ -61,19 +61,19 @@
     filter: alpha(opacity=30);
 }
 
-.irs-slider {
-    top: 25px;
-    width: 27px; height: 27px;
+.irs-slider {   /*控制白色滑块样式*/
+    top: 19px;
+    width: 18px; height: 18px;
     border: 1px solid #AAA;
     background: #DDD;
     background: linear-gradient(to bottom, rgba(255,255,255,1) 0%,rgba(220,220,220,1) 20%,rgba(255,255,255,1) 100%); /* W3C */
-    border-radius: 27px;
-    -moz-border-radius: 27px;
+    border-radius: 18px;
+    -moz-border-radius: 18px;
     box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
     cursor: pointer;
 }
 
-.irs-slider.state_hover, .irs-slider:hover {
+.irs-slider.state_hover, .irs-slider:hover {   /*控制白色滑块鼠标悬浮样式*/
     background: #FFF;
 }
 
@@ -92,12 +92,12 @@
     background: #ccc;
 }
 
-.irs-from, .irs-to, .irs-single {
+.irs-from, .irs-to, .irs-single {   /*前面上方提示框样式*/
     color: #fff;
-    font-size: 14px; line-height: 1.333;
+    font-size: 10px; line-height: 1.333;
     text-shadow: none;
     padding: 1px 5px;
-    background: #ef3753;
+    background: #399ee6;
     border-radius: 3px;
     -moz-border-radius: 3px;
 }
@@ -105,8 +105,9 @@
     background: #999;
 }
 
-.irs-grid {
-    height: 27px;
+.irs-grid { /* 控制刻度条高度 */
+    top: 35px;
+    height: 20px;
 }
 .irs-grid-pol {
     opacity: 0.5;
@@ -117,7 +118,7 @@
 }
 
 .irs-grid-text {
-    bottom: 5px;
+    bottom: 0px;
     color: #99a4ac;
 }
 

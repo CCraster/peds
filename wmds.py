@@ -1,33 +1,18 @@
-"""
-=========================
-Multi-dimensional scaling
-=========================
-
-An illustration of the metric and non-metric MDS on generated noisy data.
-
-The reconstructed points using the metric MDS and non metric MDS are slightly
-shifted to avoid overlapping.
-"""
-
-# Author: Nelle Varoquaux <nelle.varoquaux@gmail.com>
-# License: BSD
-
-# print(__doc__)
 import numpy as np
 import random
 from sklearn import manifold
 from sklearn.metrics import euclidean_distances
-
 import json
 import sys
+from compute_similarity import compute_pos_with_w
 
-# from compute_similarity import compute_pos_with_w
 
-ori_data_num = 30
-ori_data_dim = 9
-ori_data_path = "data/demo_X.csv"
-user_id_path = "UserInfo_Spider/userid_sample1.txt"
+
+current_data_path = r'data\current_X.csv'
+current_userid_path = r'data\current_userid.csv'
 new_data_dim = 2
+
+
 
 class V2PI:
     def __init__(self, points_num, ori_dim, map_dim, dist_method="euclidean", X_true=None, Z=None):
@@ -63,7 +48,7 @@ class V2PI:
             self.X_true = X_true
         else:
             self.X_true = np.zeros((points_num, ori_dim))
-            self.read_matrix(self.X_true, ori_data_path)
+            self.read_matrix(self.X_true, current_data_path)
             self.X_true -= self.X_true.mean()
         if Z is not None:
             self.Z = Z
@@ -234,11 +219,11 @@ def read_matrix(X, fname):
             X[x][y] = line[y]
         x += 1
 
-def load_useridlist(userid_path, usernum):
+def load_useridlist(userid_path):
     user_ids = []
     with open(userid_path, encoding='utf-8') as f:
-        for i in range(0, usernum):
-            user_ids.append(f.readline().strip())
+        for line in f:
+            user_ids.append(line.strip())
     return user_ids
 
 def id2index(user_ids, userid_list):
@@ -254,7 +239,7 @@ def index2id(user_ids, userindexs_list):
     return user_ids_new
 
 # 读传回的json文件
-def init_matrix(ori_data_num, ori_data_dim, new_data_dim):
+def init_matrix(ori_data_num, ori_dim, new_data_dim):
     user_pos_dict = {}
     user_pos_dict['positions'] = []
     user_pos_dict['user_id'] = []
@@ -269,13 +254,13 @@ def init_matrix(ori_data_num, ori_data_dim, new_data_dim):
                 user_pos_dict['positions'].append(pos)
                 user_pos_dict['user_id'].append(user)
 
-    X = np.zeros((ori_data_num, ori_data_dim))
-    read_matrix(X, ori_data_path)
-    X_new = np.zeros((len(user_set), ori_data_dim))
+    X = np.zeros((ori_data_num, ori_dim))
+    read_matrix(X, current_data_path)
+    X_new = np.zeros((len(user_set), ori_dim))
     Z_new = np.zeros((len(user_set), new_data_dim))
 
     # trans user id to user index
-    user_ids = load_useridlist(user_id_path, ori_data_num)
+    user_ids = load_useridlist(current_userid_path)
     user_pos_dict['user_id'] = id2index(user_ids, user_pos_dict['user_id'])
 
     sub = 0
@@ -289,7 +274,7 @@ def init_matrix(ori_data_num, ori_data_dim, new_data_dim):
     return X_new, Z_new
 
 
-def run(v2pi):
+def run(v2pi, ori_data_num, ori_dim):
     v2pi.cal_X_dist()
     # self.read_matrix(self.Z, "data/Z_euclidean.csv")
     # self.read_matrix(self.Z, "data/Z_canberra.csv")
@@ -307,25 +292,19 @@ def run(v2pi):
     w = v2pi.update_w(w)
 
     #cal mds by calculated w
-    v2pi_new = V2PI(ori_data_num, ori_data_dim, new_data_dim)
+    v2pi_new = V2PI(ori_data_num, ori_dim, new_data_dim)
     v2pi_new.cal_X_dist()
     v2pi_new.cal_Z_by_mds(w)
     print(v2pi_new.Z)
     print("Weight: %s" % w)
 
-    # #cal mds by calculated w
-    # feature_path = r'data\feature_2013Dana1_3m_addtrans.txt'
-    # v2pi_new_Z = compute_pos_with_w(feature_path, ori_data_num, w)
-
     # 写回json文件
     point_dict = {}
     point_dict['positions'] = []
-    # point_dict['user_id'] = []
     point_dict['weight'] = {"value": []}
 
     for i in range(len(v2pi_new.Z)):
-    # for i in range(len(v2pi_new_Z)):
-        # point_dict['user_id'].append(i)
+        # point_dict['positions'].append(v2pi_new.Z)
         # point_dict['positions'].append(list(v2pi_new.Z))
         point_dict['positions'].append(list(v2pi_new.Z[i]))
 
@@ -333,17 +312,19 @@ def run(v2pi):
         point_dict['weight']['value'].append(w[i])
 
     with open("static/data/demo_pos_reset.json", 'w') as fs:
-        json.dump(point_dict, fs)
-        # print(point_dict)
+         json.dump(point_dict, fs)
 
 
-def main():
+def main(ori_data_num):
+    # 获得特征数量
+    f = open(current_data_path, encoding='utf-8')
+    ori_dim = len(f.readline().strip().split(','))
+    f.close()
+
     #point_num, original_dim, new_dim, method
-    X, Z = init_matrix(ori_data_num, ori_data_dim, new_data_dim)
-    # v2pi = V2PI(30, 9, 2, "canberra")
-    # v2pi = V2PI(30, 9, 2)
-    v2pi = V2PI(np.shape(X)[0], ori_data_dim, new_data_dim, "euclidean", X, Z)
-    run(v2pi)
+    X, Z = init_matrix(ori_data_num, ori_dim, new_data_dim)
+    v2pi = V2PI(np.shape(X)[0], ori_dim, new_data_dim, "euclidean", X, Z)
+    run(v2pi, ori_data_num, ori_dim)
 
 
 if __name__ == '__main__':

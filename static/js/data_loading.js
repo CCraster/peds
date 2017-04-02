@@ -4,7 +4,7 @@
 */
 var padding = 20;
 var text_padding = 3;
-var radius = 5;
+var radius_circle = 5;
 var canvas = $("#canvas")[0];
 var context/* = canvas.getContext("2d")*/;
 var canvas_MDS_width, canvas_MDS_height;
@@ -12,13 +12,13 @@ var circles_origin = [], circles = [], weight_MDS = [];
 var data_userInfo = [], data_propertyName = [], data_userDetail = [], data_userId = [];
 var property_display = [];
 var xScale, yScale, antiXScale, antiYScale;
-var color_circle_TT = "#FF7373", color_circle_TF = "#FF0000", color_circle_FT = "#00a600", color_circle_FF = "#73ff73";
-var color_circle_hover = "#ffe66d";
-var color_button_normal = "#ef3753";
+var color_circle_TT = "red", color_circle_TF = "#f39c12", color_circle_FT = "black", color_circle_FF = "#777";
+var color_circle_hover = "#f1c40f";
+var color_button_normal = "#777";
 var color_marqueeTool = {
 	"marquee_default": "black",
-	"marquee_away_highLight": "#911231",
-	"marquee_move_highLight": "#264215",
+	"marquee_away_highLight": "#e74c3c",
+	"marquee_move_highLight": "#8e44ad",
 	"marquee_remove": "#896432",
 	"marqueeTool_remove": "teal"
 }, 
@@ -40,17 +40,17 @@ var isExpert = 1, notExpert = 0;
 var click_startPos = {x: 0, y: 0},click_endPos = {x: 0, y: 0};
 var circle_clicked_num = -1, circle_moveOver_num = -1, lastMoveOver = -1;
 var tags_all = [], tags_contains = [];
-var signal_MDS = "initiate", signal_weight = "initiate";
+var signal_MDS = "initiate";
+var canvas_scale = 1;
 
 // Circle Class
 var Circle = (function(){
 
 	// constructor
-	function Circle(user_id, x, y, radius, expert){
+	function Circle(user_id, x, y, expert){
 	this.user_id = user_id;
 	this.x = x;
 	this.y = y;
-	this.radius = radius;
 	this.expert = expert;
 	this.color_fill = [];
 	if($("#checkbox_real_show").prop("checked") == false && $("#checkbox_machine_show").prop("checked") == false)
@@ -77,8 +77,7 @@ var Circle = (function(){
 		else
 			this.color_fill.push("origin:" + color_circle_FF);
 	}
-	this.redrew();
-	return (this);
+		return (this);
 	}
 	// Redrew the circle
 	Circle.prototype.redrew = function(){
@@ -88,7 +87,7 @@ var Circle = (function(){
 		context.lineWidth = 2;
 		context.beginPath();
 		context.fillStyle = this.color_fill[this.color_fill.length - 1].split(":")[1];
-		context.arc(xScale(this.x), yScale(this.y), this.radius, 0, 2 * Math.PI, true);
+		context.arc(xScale(this.x), yScale(this.y), radius_circle, 0, 2 * Math.PI, true);
 		context.fill();
 
 		// 附加显示user_id
@@ -103,7 +102,7 @@ var Circle = (function(){
 	Circle.prototype.isPointInside = function(x, y){
 		var dx = xScale(this.x) - x;
 		var dy = yScale(this.y) - y;
-		return (dx * dx + dy * dy <= this.radius * this.radius);
+		return (dx * dx + dy * dy <= radius_circle * radius_circle);
 	}
 	// Push circle's fill color
 	Circle.prototype.pushFillColor = function(color){
@@ -136,7 +135,7 @@ var MarqueeTool = (function(){
 		this.color_border = color_border;
 		this.circles_in = [];
 		this.circles_extra = [];
-		this.redrew(this.startPos, this.endPos);
+		// this.redrew(this.startPos, this.endPos);
 		return (this);
 	}
 	// redrew the MarqueeTool  rectangle.
@@ -145,7 +144,10 @@ var MarqueeTool = (function(){
 		// circles_in = this.getCirclesInMarqueeTool(this);
 		context.save();
 		context.setLineDash([1, 2]);
-		context.strokeStyle = this.color_border;
+		if(marqueeTool_activated == "marquee_default" && marquee_activated_num > -1 && this.type == marqueeTools["marquee_default"][marquee_activated_num].type)
+			context.strokeStyle = color_circle_hover;
+		else
+			context.strokeStyle = this.color_border;
 		context.beginPath();
 		context.strokeRect(this.startPos.x, this.startPos.y, (this.endPos.x - this.startPos.x), (this.endPos.y - this.startPos.y));
 		context.restore();
@@ -166,7 +168,8 @@ var MarqueeTool = (function(){
 				}
 				else if(circlesInMarqueeTool.indexOf(i) == -1){
 					circlesInMarqueeTool.push(i);
-					circle.pushFillColor(marqueeTool.type + ":" + marqueeTool.color_border);
+					if(marqueeTool.type.indexOf("marquee_default") != 0)
+						circle.pushFillColor(marqueeTool.type + ":" + marqueeTool.color_border);
 				}
 			}
 		})
@@ -175,8 +178,8 @@ var MarqueeTool = (function(){
 	}
 	// To judge if the circle is inside the MarqueeTool rectangle.
 	MarqueeTool.prototype.isCircleInside = function(circle){
-		if((xScale(circle.x) >= (this.startPos.x + circle.radius))&&(xScale(circle.x) <= (this.endPos.x - circle.radius))
-			&&(yScale(circle.y) >= (this.startPos.y + circle.radius))&&(yScale(circle.y) <= (this.endPos.y - circle.radius)))
+		if((xScale(circle.x) >= (this.startPos.x + radius_circle))&&(xScale(circle.x) <= (this.endPos.x - radius_circle))
+			&&(yScale(circle.y) >= (this.startPos.y + radius_circle))&&(yScale(circle.y) <= (this.endPos.y - radius_circle)))
 			return true;
 		else
 			return false;
@@ -226,20 +229,21 @@ function Init(){
 
 	$("#marquee_move_highLight_checkbox").on("click", handleMarqueeMoveHighlightCheckboxClick);
 	$("#marquee_move_highLight_checkbox").prop("checked", false); //initiate the checkbox false
-	$("#marquee_move_highLight_checkbox").css("display", "none");
+	$("#marquee_move_highLight_checkbox_label").css("display", "none");
 
 	$("#tags_select_checkbox").on("click", handleTagsSelectCheckBoxClick);
 	$("#tags_select_checkbox").prop("checked", false); //initiate the checkbox false
 
 	$("#marquee_remove_checkbox").on("click", handleMarqueeRemoveCheckboxClick);
 	$("#marquee_remove_checkbox").prop("checked", false); //initiate the checkbox false
-	$("#marquee_remove_checkbox").css("display", "none");
+	$("#marquee_remove_checkbox_label").css("display", "none");
 	// $("#canvas").on("mousedown", handleMouseDown)
 	// $("#canvas").on("mouseup", handleMouseUp);
 	$("#canvas").on("mousemove", handleMouseMove_Hover);
 	// $("#canvas").on("dblclick", handleMouseDoubleClick);
+
 }
-//
+// 实验调试按钮函数
 function setExpertShow(id){
 	if(id == "checkbox_real_show"){	//处理“显示真实分类”被点击
 		if($("#checkbox_real_show").prop("checked") == true){
@@ -325,6 +329,8 @@ function setExpertShow(id){
 				d.color_fill[0] = "origin:" + color_circle_FF;
 		});
 	}
+	parcoords.color(color);
+	displayParallelCoordinates(circles);
 	canvasRedrew();
 }
 
@@ -351,21 +357,28 @@ function dataLoading(){
 		}
 	});
 
-	d3.json("static/data/demo_user30.json",	// 读取用户属性数据
+	d3.json("static/data/D_user300.json",	// 读取用户属性数据
 		function(data){
 			data_userInfo = data.attr_values;
 			data_propertyName = data.attr_name.slice(2);
 			data_userId = data.user_id;
-			property_display = data_propertyName.slice(0);	// 深拷贝
-			for(var i = 0; i < property_display.length; i++){	// Initiate the checkbox in parallel
-				$("#div_middle_bottom_property").append("<span><input type=\"checkbox\" id=\"" + "checkbox_parallel_" + property_display[i] + "\"/>" + property_display[i] +"</span><br>");
-				$("#checkbox_parallel_" + property_display[i]).prop("checked", "true");
-				$("#checkbox_parallel_" + property_display[i]).on("click", handleParallelCheckBoxClick);
-				$("#div_filter_container_property").append("<div id=\"div_filter_" + property_display[i] + "\" class=\"filter\"><span class=\"filter_span\">" + property_display[i] + "</span>" + "<div class=\"filter_div\"><input id=\"property_" + property_display[i] + "\" class=\"range_slider\" type=\"hidden\" />" + "</div></div>");
-				createFilter(property_display[i]);
+			property_display = data_propertyName.slice(0, 9);	// 深拷贝
+			for(var i = 0; i < data_propertyName.length; i++){	// Initiate the checkbox in parallel
+				$("#div_middle_bottom_property").append("<span><input type=\"checkbox\" id=\"" + "checkbox_parallel_" + data_propertyName[i] + "\"class=\"magic-checkbox\"/><label for=\"checkbox_parallel_" + data_propertyName[i] + "\"></label>" + data_propertyName[i] +"</span><br>");
+				$("#checkbox_parallel_" + data_propertyName[i]).on("click", handleParallelCheckBoxClick);
+				$("#checkbox_parallel_" + data_propertyName[i]).prop("checked", false);
+				if(property_display.indexOf(data_propertyName[i]) != -1){
+					$("#checkbox_parallel_" + data_propertyName[i]).prop("checked", true);
+					$("#div_filter_container_property").append("<div id=\"div_filter_" + data_propertyName[i] + "\" class=\"filter\"><span class=\"filter_span\">" + data_propertyName[i] + "</span>" + "<div class=\"filter_div\"><input id=\"property_" + data_propertyName[i] + "\" class=\"range_slider\" type=\"hidden\" />" + "</div></div>");
+					createFilter(data_propertyName[i]);
+				}
+				else{
+					array_hideAxis.push(data_propertyName[i]);
+				}
+					
 			}
 
-			d3.json("static/data/demo_pos30.json",	//Loading position data
+			d3.json("static/data/D_pos300.json",	//Loading position data
 				function(data){
 					var positions_mds = data.positions;
 					weight_MDS = data.weight;
@@ -388,7 +401,7 @@ function dataLoading(){
 										 .range([d3.min(positions_mds, function(d) { return d[1]; }), d3.max(positions_mds, function(d) { return d[1]; })]);
 
 					context = d3.select("#canvas")  // Set the canvas zoom function
-							.call(d3.behavior.zoom().x(xScale).y(yScale).scaleExtent([-5000, 5000])
+							.call(d3.behavior.zoom().x(xScale).y(yScale).scaleExtent([0, 100])
 							.on("zoom", handleCanvasZoom))
 							.on("dblclick.zoom", null)
 							.node()
@@ -405,13 +418,17 @@ function dataLoading(){
 					}
 					marqueeTool_remove = new MarqueeTool("marqueeTool_remove", color_marqueeTool["marqueeTool_remove"]);
 
+					radius_circle = initiateCircleRadius(positions_mds.length);
+
 					positions_mds.forEach(function(d, i){ // Initiate the circles on canvas
-						var circle = new Circle(data_userId[i], d[0], d[1], radius, data_userInfo[i][0]);
+						var circle = new Circle(data_userId[i], d[0], d[1], data_userInfo[i][0]);
+						circle.redrew();
 						circles.push(circle);
 					})
 
 					circles_origin = cloneCircleArray(circles);
 					displayWeight_MDS(weight_MDS);
+					// displayWeight_MDS();
 					displayParallelCoordinates(circles);
 				}
 			);
@@ -423,11 +440,25 @@ function dataLoading(){
 function cloneCircleArray(circleArray){
 	var new_circleArray = [];
 	for(var i = 0; i < circleArray.length; i++){
-		var circle = new Circle(circleArray[i].user_id, circleArray[i].x, circleArray[i].y, radius, circleArray[i].expert)
+		var circle = new Circle(circleArray[i].user_id, circleArray[i].x, circleArray[i].y,circleArray[i].expert)
 		circle.color_fill = circleArray[i].color_fill.slice(0);
 		new_circleArray.push(circle);
 	}
 	return new_circleArray;
+}
+//
+function initiateCircleRadius(size){
+	var radius = 0;
+	if(size <= 100)
+		radius = 5;
+	else if(size > 100 && size <= 1000)
+		radius= 4;
+	else if(size > 1000 && size <= 10000)
+		radius = 3;
+	else
+		radius = 2;
+
+	return radius;
 }
 
 // Check if circle in any MarqueeTool
@@ -446,6 +477,7 @@ function checkCircleInAnyMarqueeTool(marquee_type, circle_num){
 
 // Canvas zoom function
 function handleCanvasZoom(){
+// console.log(d3.event.sourceEvent)
 	if(marqueeTool_activated == ""){
 		for(p in marqueeTools){  // Let the marquee tool change with zoom action
 			if(p == "marquee_default" || p == "marquee_away_highLight" || p == "marquee_move_highLight"){
@@ -473,6 +505,20 @@ function handleCanvasZoom(){
 		}
 		antiXScale.range(xScale.domain());
 		antiYScale.range(yScale.domain());
+
+		if(d3.event.scale <= 1)	//重新设置圆的半径大小
+			radius_circle = initiateCircleRadius(circles_origin.length);
+		else if(d3.event.scale > 1 && d3.event.scale <= 5)
+			radius_circle = initiateCircleRadius(circles_origin.length) * 2;
+		else if(d3.event.scale > 5 && d3.event.scale <= 20)
+			radius_circle = initiateCircleRadius(circles_origin.length) * 3;
+		else if(d3.event.scale >20  && d3.event.scale <= 40)
+			radius_circle = initiateCircleRadius(circles_origin.length) * 4;
+		else if(d3.event.scale > 40 && d3.event.scale <= 70)
+			radius_circle = initiateCircleRadius(circles_origin.length) * 5;
+		else if(d3.event.scale > 70 && d3.event.scale <= 100)
+			radius_circle = initiateCircleRadius(circles_origin.length) * 6;
+
 		canvasRedrew();
 	}
 }
@@ -522,7 +568,7 @@ function handleMarqueeToolClick(e){
 		$("#" + sourse.id).css({"background-color": color_button_normal});
 		marqueeTool_activated = "";
 		d3.select("#canvas")  //Turn on the canvas zoom
-			.call(d3.behavior.zoom().x(xScale).y(yScale).scaleExtent([-5000, 5000])
+			.call(d3.behavior.zoom().x(xScale).y(yScale).scaleExtent([0, 100])
 			.on("zoom", handleCanvasZoom))
 			.on("dblclick.zoom", null);
 		$("#canvas").off("mousedown");
@@ -530,14 +576,16 @@ function handleMarqueeToolClick(e){
 	}
 	
 	if(marqueeTool_activated == "marquee_move_highLight"){
-		$("#marquee_move_highLight_checkbox").css("display", "inline");
+		$("#marquee_move_highLight_checkbox_label").css("display", "inline");
+		$("#marquee_remove_checkbox_label").css("display", "none");
 	}
 	else if(marqueeTool_activated == "marquee_remove"){
-		$("#marquee_remove_checkbox").css("display", "inline");
+		$("#marquee_move_highLight_checkbox_label").css("display", "none");
+		$("#marquee_remove_checkbox_label").css("display", "inline");
 	}
 	else{
-		$("#marquee_move_highLight_checkbox").css("display", "none");
-		$("#marquee_remove_checkbox").css("display", "none");
+		$("#marquee_move_highLight_checkbox_label").css("display", "none");
+		$("#marquee_remove_checkbox_label").css("display", "none");
 	}
 }
 
@@ -567,9 +615,9 @@ function handleMouseDown(e){
 	}
 
 	if(circle_clicked_num >= 0 && circle_clicked_num < circles.length){
-		if(e.button == 0){  //handle the left click
+		if(e.button == 0){  // 点在圆上-处理鼠标左键时事件
 			if(marqueeTool_activated != "marquee_default" && marqueeTool_activated != "" && (marqueeTools[marqueeTool_activated].length == 0 || marqueeTools[marqueeTool_activated][0].circles_extra.indexOf(circle_clicked_num) == -1) && !checkCircleInAnyMarqueeTool("", circle_clicked_num)){
-				if(marqueeTools[marqueeTool_activated].length == 0){	// no marquee, create one
+				if(marqueeTools[marqueeTool_activated].length == 0){	// 选框没有，新建一个
 					marqueeTools[marqueeTool_activated][0] = new MarqueeTool(marqueeTool_activated + "_0", color_marqueeTool[marqueeTool_activated]);
 					marquee_activated_num = 0;
 				}
@@ -579,8 +627,8 @@ function handleMouseDown(e){
 				canvasRedrew();
 			}
 		}
-		else if(e.button == 2){  //handle the right click
-			if(marqueeTool_activated != "marquee_default" && marqueeTool_activated != "" && marqueeTools[marqueeTool_activated][0].circles_extra.indexOf(circle_clicked_num) != -1){
+		else if(e.button == 2){  // 点在圆上-处理鼠标右键事件
+			if(marqueeTool_activated != "marquee_default" && marqueeTool_activated != "" && marqueeTools[marqueeTool_activated].length > 0 && marqueeTools[marqueeTool_activated][0].circles_extra.indexOf(circle_clicked_num) != -1){
 				marqueeTools[marqueeTool_activated][0].circles_extra.splice(marqueeTools[marqueeTool_activated][0].circles_extra.indexOf(circle_clicked_num), 1);
 				circles[circle_clicked_num].popFillColor(marqueeTools[marqueeTool_activated][0].type + ":" + marqueeTools[marqueeTool_activated][0].color_border);
 				marqueeTools[marqueeTool_activated][0].circles_in.splice(marqueeTools[marqueeTool_activated][0].circles_in.indexOf(circle_clicked_num), 1);
@@ -592,7 +640,7 @@ function handleMouseDown(e){
 			$("#canvas").on("mousemove", handleMouseMove_Redrew);
 		}
 	}
-	else{	// handle marquee click
+	else{	// 处理属于选框的点击
 		click_startPos = pointOnCanvas;
 		if(e.button == 0){	// handle left click
 			if(marqueeTool_activated == "marquee_default" || marqueeTool_activated == "marquee_move_highLight" || marqueeTool_activated == "marquee_away_highLight"){
@@ -653,12 +701,12 @@ function handleMouseUp(e){
 		}
 		if(marqueeTool_activated == "marquee_remove"){  // To remove the circles in marquee_remove
 			var circleSet_temp = cloneCircleArray(circles);
-			var circle_in = marqueeTools[marqueeTool_activated].circles_in;
+			var circles_in = marqueeTools[marqueeTool_activated].circles_in;
 			for(var i = 0; i < circles.length; i++){
 				if(flag_maintain_circles_in_marquee){
 					var posInCircles = getPosInCircleSet(circles[i], circleSet_temp);
 					var posInCircles_origin = getPosInCircleSet(circles[i], circles_origin);
-					if(circle_in.indexOf(i) == -1){
+					if(circles_in.indexOf(i) == -1){
 						circles_origin[posInCircles_origin].x = circleSet_temp[posInCircles].x;
 						circles_origin[posInCircles_origin].y = circleSet_temp[posInCircles].y;
 						circleSet_temp.splice(posInCircles, 1);
@@ -667,7 +715,7 @@ function handleMouseUp(e){
 						circleSet_temp[posInCircles].popFillColor(marqueeTools[marqueeTool_activated].type + ":" + marqueeTools[marqueeTool_activated].color_border);
 				}
 				else{
-					if(circle_in.indexOf(i) != -1){
+					if(circles_in.indexOf(i) != -1){
 						var posInCircles = getPosInCircleSet(circles[i], circleSet_temp);
 						var posInCircles_origin = getPosInCircleSet(circles[i], circles_origin);
 						circles_origin[posInCircles_origin].x = circleSet_temp[posInCircles].x;
@@ -706,8 +754,11 @@ function handleMouseMove_Redrew(e){
 function handleMouseMove_Hover(e){
 	var pointOnCanvas = getPointOnCanvas(canvas, e.pageX, e.pageY);
 	
-	if(marqueeTool_activated == "marquee_default" || marqueeTool_activated == "marquee_away_highLight" || marqueeTool_activated == "marquee_move_highLight")
+	if(marqueeTool_activated == "marquee_default" || marqueeTool_activated == "marquee_away_highLight" || marqueeTool_activated == "marquee_move_highLight"){
 		setMouseCursor(getMarqueeDefaultMouseType(pointOnCanvas));
+		if(marqueeTool_activated == "marquee_default" && marquee_activated_num >= 0)
+			canvasRedrew();
+	}
 	else
 		setMouseCursor(getMouseType(pointOnCanvas));
 
@@ -837,7 +888,7 @@ function handleMouseMove_MarqueeTool(e){
 		marqueeTool_remove.circles_in = marqueeTool_remove.getCirclesInMarqueeTool(marqueeTool_remove);
 	}
 	if(mouse_drag_type != mouse_drag_types["marqueeTool_remove"]
-		&& !(mouse_drag_type == mouse_drag_types["marquee_move"] && marqueeTool_activated == "marquee_move_highLight" && marqueeTools["marquee_move_highLight"][marquee_activated_num].circlesMoveEnabled == true) && marquee_activated_num > -1)
+		&& !(mouse_drag_type == mouse_drag_types["marquee_move"] && marqueeTool_activated == "marquee_move_highLight" && marqueeTools["marquee_move_highLight"][marquee_activated_num].circlesMoveEnabled == true))
 		active_marqueeTool.circles_in = active_marqueeTool.getCirclesInMarqueeTool(active_marqueeTool);
 	canvasRedrew();
 	
@@ -969,10 +1020,6 @@ function getMarqueeDefaultMouseType(pos){
 			marquee_activated_num = i;
 			return mouse_drag_types["marquee_move"];
 		}
-		// else{
-		// 	marquee_default_num = i;
-		// 	return mouse_drag_types["out_the_marquee"];
-		// }
 	}
 
 	marquee_activated_num = -1;

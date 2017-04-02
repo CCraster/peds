@@ -4,35 +4,34 @@
 // 	.interpolate(d3.interpolateLab);
 
 var color = function(d){
-	var c = new Circle(d.user_id, 0, 0, 0, "");;
+	var c = new Circle(d.user_id, 0, 0, "");;
 	var pos = getPosInCircleSet(c, circles);
 	return circles[pos].color_fill[circles[pos].color_fill.length - 1].split(":")[1];
 };
+var array_hideAxis = ["user_id", "isExpert"];
 
-var parcoords, array_hideAxis = ["user_id", "isExpert"];
+var parcoords = d3.parcoords()("#div_middle_parallelCoordinates")
+			.color(color)
+			.alpha(0.25)
+			.mode("queue") // progressive rendering
+			.height($("#div_middle_parallelCoordinates")[0].clientHeight)
+			.margin({
+				top: 25,
+				left: 3,
+				right: 3,
+				bottom: 10
+			});
 
  function displayParallelCoordinates(circleSet){
 
 	var user_data_parallel = getUserDataParallel(circleSet);
-	if($("#div_middle_parallelCoordinates").children())	// empty the parallel div if it has content
-		$("#div_middle_parallelCoordinates").empty();
-	parcoords = d3.parcoords()("#div_middle_parallelCoordinates")
-			.color(color)
-			.alpha(1)
-			.mode("queue") // progressive rendering
-			.height($("#div_middle_parallelCoordinates")[0].clientHeight)
-			.margin({
-				top: 36,
-				left: 0,
-				right: 0,
-				bottom: 16
-			});
 	parcoords
 			.data(user_data_parallel) 
 			.hideAxis(array_hideAxis)
 			.render()
 			.reorderable()
-			.brushMode("1D-axes");
+			.brushMode("1D-axes")
+			.interactive();
 	highlightDataInParallelCoordinate();
 	// parcoords.on("brush", function(d){ console.log(d)})
  }
@@ -65,6 +64,8 @@ function highlightDataInParallelCoordinate(){
 	for(var i = 0; i < circles.length; i++){
 		if(circles[i].color_fill.length > 1)
 			array_highlighted.push(getSingleDisplayUnit(circles[i]));
+		else if(marqueeTool_activated == "marquee_default" && marquee_activated_num > -1 && marqueeTools["marquee_default"][marquee_activated_num].isCircleInside(circles[i]))
+			array_highlighted.push(getSingleDisplayUnit(circles[i]));
 	}
 	if(array_highlighted.length > 0)
 		parcoords.highlight(array_highlighted);
@@ -73,19 +74,38 @@ function highlightDataInParallelCoordinate(){
 }
 //////////////////////////////////////////////////////////////////////////////
 function handleParallelCheckBoxClick(e){
-	var filter_id = e.target.id.split("checkbox_parallel_")[1];
+	var filter_id = e.target.id.split("checkbox_parallel_")[1];console.log(filter_id)
 	if(e.target.checked == true){
 		property_display.push(filter_id);
 		$("#div_filter_container_property").append("<div id=\"div_filter_" + filter_id + "\" class=\"filter\"><span class=\"filter_span\">" + filter_id + "</span>" + "<div class=\"filter_div\"><input id=\"property_" + filter_id + "\" class=\"range_slider\" type=\"hidden\" />" + "</div></div>");
 		createFilter(filter_id);
 		array_hideAxis.splice(array_hideAxis.indexOf(filter_id), 1);
-		$("#div_middle_parallelCoordinates").empty();
-		displayParallelCoordinates(circles);
+		parcoords.hideAxis(array_hideAxis);
+		highlightDataInParallelCoordinate();
 	}
 	else{
 		$("#div_filter_" + filter_id).remove();
 		property_display.splice(property_display.indexOf(filter_id), 1);
 		array_hideAxis.push(filter_id);
+		parcoords.hideAxis(array_hideAxis);
+		highlightDataInParallelCoordinate();
+	}
+}
+// 
+function parallelCoordinatesRefit(){
+	var flag = false;
+	circles.forEach(function(d){
+		if(d.color_fill.length > 1){
+			flag = true;
+		}
+	});
+	if(flag)
+		displayParallelCoordinates(circles);
+	else if(property_display.length > 0){
+		var property_delete = property_display.splice(property_display, 1);
+		$("#div_middle_parallelCoordinates").empty();
+		displayParallelCoordinates(circles);
+		property_display.push(property_delete);
 		$("#div_middle_parallelCoordinates").empty();
 		displayParallelCoordinates(circles);
 	}

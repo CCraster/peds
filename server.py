@@ -4,9 +4,12 @@ import tornado.options
 import tornado.web
 import os
 import json
-import wmds
-
 from tornado.options import define, options
+
+import wmds
+import update_X
+import compute_similarity
+
 
 
 define("port", default=8689, help="run on the given port", type=int)
@@ -18,8 +21,8 @@ class MainHandler(tornado.web.RequestHandler):
     def post(self):
         mds_message = self.request.body.decode('ascii')
         signal_MDS = mds_message.split('%')[1]
+
         dict_circles = {}
-        # dict_circles
         dict_circles[0] = {"positions": [], "user_id": []}
         dict_circles[1] = {"positions": [], "user_id": []}
         dict_circles[2] = {"positions": [], "user_id": []}
@@ -38,46 +41,44 @@ class MainHandler(tornado.web.RequestHandler):
         with open("static/data/pos_v2pi.json", 'w') as fs:
             json.dump(dict_circles, fs)
 
-        wmds.main()
+        wmds.main(int(signal_MDS))
 
-        # with open("static/data/demo_pos.json", "r") as fs:
-        #     data_origin =json.load(fs)
-
-        # for i in range(len(data_origin["positions"])):
-        #     data_origin["positions"][i][0] = int(data_origin["positions"][i][0] * 100 + 10)
-        #     data_origin["positions"][i][1] = int(data_origin["positions"][i][1] * 100 + 20)
-
-        # with open("static/data/demo_pos_reset.json", "w") as fs:
-        #     json.dump(data_origin, fs)
         with open("static/data/demo_pos_reset.json", "r") as fs:
             data_feedback = json.load(fs)
         self.write(data_feedback)
 
 
-
 class WeightChangeHandler(tornado.web.RequestHandler):
     def get(self):
-    	self.render("index.html")
+        self.render("index.html")
     def post(self):
         weight_message = self.request.body.decode('ascii')
         weight_new = weight_message.split("%")[0]
-        singal_weight = weight_message.split("%")[1]
+        singal_MDS = weight_message.split("%")[1]
 
-        youfunction(weight_new, singal_weight)   #师姐你的处理函数, weight_new是前台传入的权值，signal_weight是权值的参数
+        compute_similarity.compute_pos_with_update_w(int(singal_MDS), weight_new)
 
         with open("static/data/demo_pos_reset.json", "r") as fs:
             data_feedback = json.load(fs)
-        singal_weight_feedback = "这里写入新的返回的权值的signal" #这里写入你新的权值的signal
-        self.write(json.dumps(data_feedback) + "%" + singal_weight_feedback)
+        self.write(data_feedback)
 
 class FocusUserConfirmHandler(tornado.web.RequestHandler):
     def get(self):
         self.render("index.html")
     def post(self):
         focusUserId = self.request.body.decode('ascii')
-        youfunction(focusUserId)   #师姐你的处理函数， focusUserId是屏幕上筛选后userid
-        self.write("这里写返回给前台的标识")
+        user_num = update_X.update_current_X(focusUserId)
+        self.write(str(user_num))
 
+class MDSRuleApplyHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.render("index.html")
+    def post(self):
+        weight_apply = self.request.body.decode('ascii')
+        #调用你的函数
+        with open("static/data/D_pos300.json", "r") as fs:
+            data_feedback = json.load(fs)
+        self.write(data_feedback)
 
 
 settings = {
@@ -90,7 +91,8 @@ def main():
     application = tornado.web.Application([
         (r"/", MainHandler),
         (r"/weightChange", WeightChangeHandler),
-        (r"/focusUserChange", FocusUserConfirmHandler)
+        (r"/focusUserChange", FocusUserConfirmHandler),
+        (r"/mdsRuleApply", MDSRuleApplyHandler)
 
     ],**settings)
 

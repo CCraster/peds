@@ -1,5 +1,5 @@
 .parcoords > canvas {
-  font: 14px sans-serif;
+  font: 10px sans-serif !important;
   position: absolute;
 }
 .parcoords > canvas {
@@ -28,11 +28,11 @@
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  background-color: #182128;
+  background-color: #fafafa;
 }
-.domain{
+/*.domain{
   stroke: #fff !important;
 }
 .parcoords line{
   stroke: #fff !important;
-}
+}*/

@@ -4,6 +4,7 @@
 		<title>MDS PLOT</title>
 		<link type="text/css" rel="stylesheet" href="static/css/main.css">
 		<link type="text/css" rel="stylesheet" href="static/css/d3.parcoords.css">
+		<link type="text/css" rel="stylesheet" href="static/css/magic-check.css">
 		<link rel="stylesheet" href="static/css/ion.css/ion.rangeSlider.css" />
 		<link rel="stylesheet" href="static/css/ion.css/ion.rangeSlider.skinHTML5.css"/>
 		<script src="static/lib/d3.min.js"></script>
@@ -45,6 +46,7 @@
 			</div>
 			<input type="button" id="submit_weight" value="提交权值" onclick="weightConfirm()"/>
 			<input type="button" id="submit_focus_userId" value="提交屏幕用户" onclick="focusUserConfirm()"/>
+			<input type="button" id="submit_apply" value="应用" onclick="MDSRuleApply()"/>
 		</div>
 		<div id="div_container">
 
@@ -55,7 +57,10 @@
 
 				
 				<div id="div_left_top_tag">
-					<span id="div_left_top_tag_name" class="span_normal">TAGS<input type="checkbox" id="tags_select_checkbox" checked="false"/></span><br>
+					<span id="div_left_top_tag_name" class="span_title">TAGS&nbsp;
+					<input type="checkbox" id="tags_select_checkbox" class="magic-checkbox" checked="false"/>
+					<label for="tags_select_checkbox"></label>
+					</span><br>
 					<div id="div_left_top_tag_content">
 					</div>
 				</div>
@@ -65,6 +70,7 @@
 			<div id="div_left_bottom">
 				<div id="div_left_bottom_logoBar" class="logo_bar">Weight View</div>
 				<div id="div_left_bottom_weight"></div>
+				<div id="div_left_bottom_weight_xAxis"></div>
 			</div>
 		</div>
 		<!-- Div_middle -->
@@ -74,11 +80,14 @@
 				<div id="div_middle_toolbar">
 					<input id="marquee_default" class="button_normal" type="button" value="默认选框" />
 					<input id="marquee_remove" class="button_normal" style="margin-left: -5px;" type="button" value="框选去除" />
-					<input type="checkbox" id="marquee_remove_checkbox" checked="false"/>
+					<input type="checkbox" id="marquee_remove_checkbox" class="magic-checkbox" checked="false"/>
+					<label id="marquee_remove_checkbox_label" for="marquee_remove_checkbox"></label>
+					<!-- <input class="button_submit" style="float: right" type="button" value="GoBack(0)" onclick="systemStatusRestore()"> -->
 					<input class="button_submit" style="float: right" type="button" value="Submit" onclick="mdsPlotConfirm()">
 					<input id="marquee_away_highLight" class="button_normal" style="float: right" type="button" value="远离高亮" />
 					<input id="marquee_move_highLight" class="button_normal" style="float: right" type="button" value="移动高亮" />
-					<input type="checkbox" style="float: right; margin-top: 12px;" id="marquee_move_highLight_checkbox" checked="false"/>
+					<input type="checkbox" id="marquee_move_highLight_checkbox" class="magic-checkbox" checked="false"/>
+					<label id="marquee_move_highLight_checkbox_label" style="float: right; margin-top: 6px;" for="marquee_move_highLight_checkbox"></label>
 					
 				</div>
 				<div id="div_middle_canvas">
@@ -95,7 +104,7 @@
 		</div>
 		<!-- Div_right -->
 		<div id="div_right">
-			<div id="div_right_logoBar" class="logo_bar">User Details View</div>
+			<div id="div_right_logoBar" class="logo_bar">Profile View</div>
 			<div id="div_right_content">
 				<div id="div_right_top">
 					<div id="div_right_top_left">
@@ -103,21 +112,25 @@
 						<span id="user_name">NAME</span>
 					</div>
 					<div id="div_right_top_right">
-						<span class="span_reputation">Reputation: <label id="user_reputation"></label></span><br>
+						<span class="span_reputation">Reputation: <label id="user_reputation">0</label></span><br>
 						<label id="badge_gold"></label>
 						<label id="badge_silver"></label>
 						<label id="badge_bronze"></label><br>
-						<span class="span_reputation">answers: <label id="user_answers"></label></span><br>
-						<span class="span_reputation">questions: <label id="user_questions"></label></span><br>
-						<span class="span_reputation">people reached: <label id="user_people_reached"></label></span><br>
+						<span class="span_reputation">answers: <label id="user_answers">0</label></span><br>
+						<span class="span_reputation">questions: <label id="user_questions">0</label></span><br>
+						<span class="span_reputation">people reached: <label id="user_people_reached">0</label></span><br>
 					</div>
 				</div>
 				<div id="div_right_middle1">
+					<span class="span_title">User Stats</span>
+					<div id="div_right_middle1_content">Nothing found here!</div>
 				</div>
 				<div id="div_right_middle2">
+					<span class="span_title">Details</span>
+					<div id="div_right_middle2_content">Nothing found here!</div>
 				</div>
 				<div id="div_right_bottom">
-					<span>Total Tags<label id="label_total_tag">(0)</label></span>
+					<span style="margin-left: 5px;" class="span_title">Total Tags(<label id="label_total_tag" style="font-weight: normal;">0</label>)</span>
 					<div id="div_right_bottom_first" class="div_tag1">
 						<span id="div_right_bottom_first_span" class="span_tagname"></span>
 						<span  class="span_score" style="line-height: 27.5px;">
